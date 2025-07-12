@@ -1,0 +1,11 @@
+@font-face {
+    font-family: 'Hazy Gothic';
+    src: url(HazyGothicSC.woff2) format('woff2');
+    src: url(HazyGothicSC.woff) format('woff');
+    src: url(HazyGothicSC.ttf) format('truetype');
+    font-display: swap;
+}
+
+body {
+    font-family: 'Hazy Gothic';
+}

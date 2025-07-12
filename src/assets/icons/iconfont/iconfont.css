@@ -1,0 +1,95 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 4599532 */
+  src: url('iconfont.woff2?t=1752080093172') format('woff2'),
+       url('iconfont.woff?t=1752080093172') format('woff'),
+       url('iconfont.ttf?t=1752080093172') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-buymeacoffee:before {
+  content: "\eb56";
+}
+
+.icon-patreon:before {
+  content: "\e634";
+}
+
+.icon-pixiv:before {
+  content: "\e603";
+}
+
+.icon-mp:before {
+  content: "\e602";
+}
+
+.icon-duolingo:before {
+  content: "\ec18";
+}
+
+.icon-modian:before {
+  content: "\e8ca";
+}
+
+.icon-heybox:before {
+  content: "\e601";
+}
+
+.icon-epic:before {
+  content: "\eb8a";
+}
+
+.icon-twitch:before {
+  content: "\eb29";
+}
+
+.icon-youtube:before {
+  content: "\e883";
+}
+
+.icon-nintendo:before {
+  content: "\f1fc";
+}
+
+.icon-playstation:before {
+  content: "\f214";
+}
+
+.icon-discord:before {
+  content: "\ebf8";
+}
+
+.icon-instagram:before {
+  content: "\e87f";
+}
+
+.icon-xbox:before {
+  content: "\e69d";
+}
+
+.icon-X:before {
+  content: "\e606";
+}
+
+.icon-afdian:before {
+  content: "\e600";
+}
+
+.icon-github:before {
+  content: "\e885";
+}
+
+.icon-steam:before {
+  content: "\e722";
+}
+
+.icon-bilibili:before {
+  content: "\ea82";
+}
+

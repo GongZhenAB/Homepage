@@ -1,0 +1,176 @@
+<template>
+    <div class="card request">
+        <div class="card-header">
+            <h2><i class="fa fa-user-plus"></i>友链申请</h2>
+            <div class="card-btns">
+                <button class="close-btn"></button>
+            </div>
+        </div>
+        <div class="card-content request-box">
+            <div class="notice-box">
+                <div class="notice" style="
+                color: #FFA500;
+                background-color: #FFA50020;">
+                    <div class="notice-title">
+                        <i class="fa fa-triangle-exclamation"></i>
+                        友链申请须知
+                    </div>
+                    <ol>
+                        提交申请前请确保：
+                        <li>网站可正常访问</li>
+                        <li>内容符合相关法律法规</li>
+                    </ol>
+                </div>
+                <div class="notice">
+                    <div class="notice-title">
+                        <i class="fa fa-info-circle"></i>
+                        友链申请说明
+                    </div>
+                    <ol>
+                        <li>
+                            本站接受以下类型的友链申请：
+                            <ol>
+                                <li>个人网站</li>
+                                <li>社交媒体</li>
+                            </ol>
+                        </li>
+                        <li>友链将会在审核通过后展示</li>
+                        <li>如果您的网站信息发生变更，请点击以下链接<br>
+                            <a
+                                href="mailto:YOU_MAIL_ADDRESS?cc=&bcc=&subject=%E5%8F%8B%E9%93%BE%E4%BF%A1%E6%81%AF%E6%9B%B4%E6%96%B0&body=%E5%8E%9F(%E5%BF%85%E5%A1%AB)%0A%E5%90%8D%E7%A7%B0%3A%0AURL%3A%0A%E5%9B%BE%E6%A0%87URL%3A%0A%0A%E6%96%B0(%E4%B8%8D%E5%8F%98%E5%8F%AF%E7%95%99%E7%A9%BA)%0A%E5%90%8D%E7%A7%B0%3A%0AURL%3A%0A%E5%9B%BE%E6%A0%87URL"><i
+                                    class="fa fa-link"></i>更新友链信息</a>
+                        </li>
+                        <!-- 将 YOU_MAIL_ADDRESS 改为你的邮件地址 -->
+                    </ol>
+                </div>
+            </div>
+            <form class="request-form">
+                <label for="name"><i class="fa fa-image-portrait"></i>名称</label>
+                <input type="text" placeholder="网站的名称" id="name" name="name" maxlength="10" required>
+                <label for="url"><i class="fa fa-link"></i>链接</label>
+                <input type="url" placeholder="网站的URL" id="url" name="url" required>
+                <label for="icon"><i class="fa fa-image"></i>图标</label>
+                <input type="url" placeholder="图标的URL" id="icon" name="icon" required></i>
+                <label for="email"><i class="fa fa-envelope"></i>邮箱</label>
+                <input type="email" placeholder="用于联系的邮箱" id="email" name="email" required>
+                <button type="submit">提交</button>
+            </form>
+        </div>
+    </div>
+</template>
+
+<style>
+    .request-box {
+        display: flex;
+        align-items: center;
+    }
+
+    .notice-box {
+        display: flex;
+        flex-direction: column;
+        width: 35%;
+        height: 100%;
+        gap: 0.5rem;
+    }
+
+    .notice {
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        background-color: #FFFFFF20;
+    }
+
+    .notice-title {
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+    }
+
+    .notice-title>i {
+        margin-right: 0.25em;
+    }
+
+    .notice ol {
+        padding-left: 0.5em;
+    }
+
+    .notice>ol ol {
+        list-style-type: lower-roman;
+    }
+
+    .request-form {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        height: 100%;
+    }
+
+    .request-form input {
+        margin-top: 0.5rem;
+        margin-bottom: 1rem;
+        padding: 0.5rem;
+        width: 100%;
+        height: 2.75rem;
+        box-sizing: border-box;
+        border-radius: 0.5rem;
+        background-color: #FFFFFF20;
+    }
+
+    .request-form label {
+        font-size: 1.2rem;
+    }
+
+    .request-form button {
+        margin-top: auto;
+        padding: 0.5rem;
+        width: 100%;
+        height: 2.5rem;
+        box-sizing: border-box;
+        border-radius: 0.5rem;
+        background-color: #00000020;
+        transition: background-color 0.25s;
+    }
+
+    .request-form button:hover {
+        background-color: #00000040;
+    }
+
+    @media screen and (max-width: 767px) {
+        .request-box {
+            flex-direction: column;
+        }
+
+        .notice-box {
+            flex-direction: row;
+            width: 100%;
+            height: fit-content;
+        }
+
+        .notice {
+            flex: 1;
+            height: 10rem;
+            overflow-y: auto;
+        }
+
+        .request-form {
+            width: 100%;
+        }
+    }
+</style>
+
+<script>
+    const requestForm = $(".request-form");
+    if (requestForm) {
+        requestForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+            const name = requestForm.name.value.trim();
+            const url = requestForm.url.value.trim();
+            const icon = requestForm.icon.value.trim();
+            const email = requestForm.email.value.trim();
+
+            const subject = encodeURIComponent("友链申请");
+            const body = encodeURIComponent(
+                `名称: ${name}\n链接: ${url}\n图标: ${icon}\n邮箱: ${email}`
+            );
+            window.location.href = `mailto:YOU_MAIL_ADDRESS?subject=${subject}&body=${body}`;// 将 YOU_MAIL_ADDRESS 改为你的邮件地址
+        });
+    }
+</script>

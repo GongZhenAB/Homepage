@@ -1,0 +1,92 @@
+<template>
+    <div class="card about">
+        <div class="card-header">
+            <h2><i class="fa fa-user"></i>关于</h2>
+            <div class="card-btns">
+                <div class="btn-group">
+                    <a href="https://github.com/">
+                        <i class="fa fa-star" style="color: hsl(45, 90%, 70%);"></i>
+                        <span>关注我</span>
+                    </a>
+                    <a href="javascript:void(0);" data-card="donate">
+                        <i class="fa fa-heart" style="color: hsl(330, 90%, 70%);"></i>
+                        <span>赞助我</span>
+                    </a>
+                    <a href="javascript:void(0);" data-card="anime">
+                        <i class="fa fa-clapperboard" style="color: hsl(200, 90%, 70%);"></i>
+                        <span>我的追番</span>
+                    </a>
+                </div>
+                <div class="btn-group">
+                    <a href="https://github.com/" target="_blank">
+                        <i class="fab fa-github"></i><span>主页</span>
+                    </a>
+                </div>
+                <button class="close-btn"></button>
+            </div>
+        </div>
+        <div class="card-content profile"></div>
+    </div>
+</template>
+
+<style>
+    .profile {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        text-align: center;
+    }
+
+    .profile * {
+        max-width: 100%;
+    }
+
+    .profile h1,
+    .profile h2,
+    .profile h3,
+    .profile h4,
+    .profile h5,
+    .profile h6 {
+        margin-top: 1em;
+    }
+
+    .profile hr {
+        width: 80%;
+        opacity: 0.5;
+    }
+
+    .profile blockquote {
+        font-size: 0.9em;
+        opacity: 0.8;
+    }
+
+    .profile ul {
+        width: 50%;
+        text-align: left;
+    }
+
+    .profile iframe {
+        width: 50%;
+        height: 90px;
+        max-width: 300px;
+        border: 0;
+    }
+
+    @media screen and (max-width: 767px) {
+
+        .profile ul,
+        .profile iframe {
+            width: 100%;
+        }
+    }
+</style>
+
+<script src="/src/js/marked.min.js"></script>
+<script>
+    fetch("/src/data/profile.md")
+        .then((res) => res.text())
+        .then((md) => {
+            const profile = $(".profile").innerHTML = window.marked ? marked.parse(md) : md;
+        });
+</script>

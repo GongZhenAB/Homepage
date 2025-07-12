@@ -1,0 +1,167 @@
+<template>
+    <div class="card anime">
+        <div class="card-header">
+            <h2><i class="fa fa-clapperboard"></i>追番</h2>
+            <div class="card-btns">
+                <a href="https://anilist.co/user/GongZhenCN/">
+                    <i class="fa fa-external-link-alt"></i><span>我的主页</span>
+                </a>
+                <button class="close-btn"></button>
+            </div>
+        </div>
+        <div class="card-content anime-list">
+            <div class="anime-filter">
+                <a href="#anime-watching"><i class="fa fa-circle-play"></i>在看</a>
+                <a href="#anime-planning"><i class="fa fa-clock"></i>想看</a>
+                <a href="#anime-completed"><i class="fa fa-circle-check"></i>看过</a>
+            </div>
+            <h3 id="anime-watching">在看的番</h3>
+            <div class="anime-grid watching"></div>
+            <h3 id="anime-planning">想看的番</h3>
+            <div class="anime-grid planning"></div>
+            <h3 id="anime-completed">看过的番</h3>
+            <div class="anime-grid completed"></div>
+            <p style="font-size: 0.8em; opacity: 0.8;">
+                数据来源 <a href="https://anilist.co/" target="_blank">AniList</a>
+            </p>
+            <a href="https://www.pixiv.net/artworks/127521407" target="_blank">
+                <img style="height: 80px;position: absolute;bottom: 0;left: 0.5rem;" src="/src/assets/images/miku.png"
+                    alt="miku">
+            </a>
+        </div>
+    </div>
+</template>
+
+<style>
+    .anime-list {
+        flex-direction: column;
+    }
+
+    .anime-filter {
+        position: sticky;
+        top: 0;
+        padding: 0.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        border-radius: 2rem;
+        background-color: #00000020;
+        z-index: 1;
+    }
+
+    .anime-filter a {
+        padding: 0.25rem 0.5rem;
+        border-radius: 1rem;
+        color: #FFFFFF;
+        transition: background-color 0.25s;
+    }
+
+    .anime-filter a:hover {
+        background-color: #FFFFFF20;
+    }
+
+    .anime-grid {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        width: 100%;
+        gap: 1rem;
+    }
+
+    .anime-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: #FFFFFF !important;
+        gap: 0.5rem;
+        transition: filter 0.25s;
+    }
+
+    .anime-item:hover {
+        filter: brightness(0.8);
+    }
+
+    .anime-item img {
+        width: 100%;
+        aspect-ratio: 3/4;
+        border-radius: 0.25rem;
+        background-color: #808080;
+        object-fit: cover;
+    }
+
+    .anime-item span {
+        width: 100%;
+        height: 2em;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        text-align: center;
+        line-height: 1em;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    @media screen and (max-width: 767px) {
+        .anime-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+</style>
+
+<script>
+    const query = `
+query {
+  MediaListCollection(userName: "YOU_USERNAME", type: ANIME) {
+    lists {
+      name
+      entries {
+        media {
+          siteUrl
+          coverImage {
+            large
+          }
+          title {
+            native
+          }
+        }
+      }
+    }
+  }
+}`;// 将 "YOU_USERNAME" 替换为你的 AniList 用户名
+    fetch("https://graphql.anilist.co", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+        },
+        body: JSON.stringify({query}),
+    })
+        .then((res) => res.json())
+        .then(({data}) => {
+            const lists = data.MediaListCollection.lists;
+            lists.forEach((list) => {
+                const category = list.name.toLowerCase();
+                const container = document.querySelector(
+                    `.anime-list .${category}`
+                );
+                if (!container) return;
+                list.entries.forEach(({media}) => {
+                    const item = document.createElement("a");
+                    item.className = "anime-item";
+                    item.href = media.siteUrl;
+                    item.target = "_blank";
+                    const img = document.createElement("img");
+                    img.src = media.coverImage.large;
+                    img.alt = media.title.native;
+                    const span = document.createElement("span");
+                    span.textContent = media.title.native;
+                    item.appendChild(img);
+                    item.appendChild(span);
+                    container.appendChild(item);
+                });
+            });
+        })
+        .catch((error) => {
+            console.error("获取番剧列表失败：", error);
+        });
+</script>

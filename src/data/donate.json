@@ -1,0 +1,30 @@
+{
+    "ways": [
+        {
+            "name": "GitHub",
+            "link": "https://github.com/",
+            "icon": "github"
+        },
+        {
+            "name": "Buy Me a Coffee",
+            "link": "https://coff.ee/",
+            "icon": "buymeacoffee"
+        },
+        {
+            "name": "Patreon",
+            "link": "https://patreon.com/",
+            "icon": "patreon"
+        },
+        {
+            "name": "爱发电",
+            "link": "https://afdian.com/a/",
+            "icon": "afdian"
+        },
+        {
+            "name": "摩点",
+            "link": "https://www.modian.com/user/homepage/",
+            "icon": "modian"
+        }
+    ],
+    "donaters": []
+}

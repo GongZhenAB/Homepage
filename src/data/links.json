@@ -1,0 +1,23 @@
+{
+    "sites": [
+        {
+            "name": "个人网站",
+            "link": "./",
+            "icon": "fa fa-home"
+        }
+    ],
+    "socials": [
+        {
+            "name": "GitHub",
+            "link": "https://github.com/",
+            "icon": "iconfont icon-github"
+        }
+    ],
+    "friends": [
+        {
+            "name": "Zhen 的小站",
+            "link": "https://gongz.moe",
+            "img": "https://gongz.top/src/assets/images/og/og-image.png"
+        }
+    ]
+}

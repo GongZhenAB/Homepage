@@ -1,0 +1,94 @@
+<template>
+    <div class="card gallery">
+        <div class="card-header">
+            <h2><i class="fa fa-images"></i>图库</h2>
+            <div class="card-btns">
+                <button class="close-btn"></button>
+            </div>
+        </div>
+        <div class="card-content gallery-masonary"></div>
+    </div>
+</template>
+
+<style>
+    .gallery-item {
+        position: relative;
+        max-width: 300px;
+        box-sizing: border-box;
+        overflow: hidden;
+    }
+
+    .gallery-item img {
+        display: block;
+        width: 100%;
+        height: auto;
+        background-color: #808080;
+        object-fit: cover;
+        cursor: zoom-in;
+    }
+
+    .photo-info {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        padding: 0.5rem;
+        width: 100%;
+        box-sizing: border-box;
+        background-color: #00000080;
+        backdrop-filter: blur(5px);
+        transform: translateY(100%);
+        opacity: 0;
+        transition: transform 0.25s, opacity 0.25s;
+        z-index: 1;
+    }
+
+    .gallery-item:hover .photo-info {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    .photo-info p {
+        opacity: 0.8;
+    }
+</style>
+
+<script src="src/js/masonry.pkgd.min.js"></script>
+<script src="src/js/imagesloaded.pkgd.min.js"></script>
+<script>
+    fetch("/src/data/gallery.json")
+        .then((res) => res.json())
+        .then((images) => {
+            const grid = document.querySelector(".gallery-masonary");
+            images.forEach((imgObj) => {
+                const item = document.createElement("div");
+                item.className = "gallery-item";
+
+                const img = document.createElement("img");
+                img.src = imgObj.src;
+                img.alt = imgObj.title;
+                img.addEventListener("click", () => {
+                    window.open(imgObj.src);
+                });
+                item.appendChild(img);
+
+                const info = document.createElement("div");
+                info.className = "photo-info";
+                const h3 = document.createElement("h3");
+                h3.textContent = imgObj.title;
+                info.appendChild(h3);
+                const p = document.createElement("p");
+                p.textContent = imgObj.desc;
+                info.appendChild(p);
+                item.appendChild(info);
+
+                grid.appendChild(item);
+            });
+            imagesLoaded(grid, function () {
+                new Masonry(grid, {
+                    itemSelector: ".gallery-item",
+                    gutter: 16,
+                    fitWidth: true,
+                });
+            });
+        });
+</script>

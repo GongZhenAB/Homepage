@@ -1,0 +1,173 @@
+<template>
+    <div class="card works">
+        <div class="card-header">
+            <h2><i class="fa fa-code"></i>作品</h2>
+            <div class="card-btns">
+                <button class="close-btn"></button>
+            </div>
+        </div>
+        <div class="card-content works-grid">
+            <div class="work-item">
+                <div class="work-basic">
+                    <img src="src/assets/images/works/site.png" alt="Zhen's Site">
+                </div>
+                <div class="work-info">
+                    <h2>Zhen 的小站</h2>
+                    <span>就是这个！</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<style>
+    .works-grid {
+        flex-direction: row;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .work-item {
+        position: relative;
+        width: calc(50% - 0.5rem);
+        /* 减去间距的一半 */
+        aspect-ratio: 4/3;
+        flex-shrink: 0;
+        border-radius: 0.5rem;
+        overflow: hidden;
+    }
+
+    .work-basic {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transition: all 0.25s;
+    }
+
+    .work-item:hover .work-basic {
+        filter: blur(5px);
+        transform: scale(1.1);
+    }
+
+    .work-basic img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .work-tags {
+        position: absolute;
+        top: 0.5rem;
+        left: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .work-tags .tag {
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        background-color: #00000040;
+    }
+
+    .work-item:hover .work-tags {
+        display: none;
+    }
+
+    .work-info {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+        background-color: #00000040;
+        transform: scale(1.2);
+        opacity: 0;
+        transition: transform 0.25s, opacity 0.25s;
+    }
+
+    .work-item:hover .work-info {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    .work-info h2 {
+        margin-bottom: 0.5rem;
+        text-wrap: nowrap;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    .work-info a {
+        margin-top: auto;
+        padding: 0.25rem 1rem;
+        text-align: center;
+        line-height: 2rem;
+        border-radius: 1rem;
+        color: #FFFFFF;
+        background-color: #00000020;
+        transition: background-color 0.25s;
+    }
+
+    .work-info a:hover {
+        background-color: #00000040;
+    }
+
+    @media screen and (max-width: 767px) {
+        .work-item {
+            width: 100%;
+        }
+    }
+</style>
+
+<script>
+    fetch("/src/data/works.json")
+        .then((res) => res.json())
+        .then((works) => {
+            const list = $(".works-grid");
+            if (!list) return;
+            works.forEach((work) => {
+                const item = document.createElement("div");
+                item.className = "work-item";
+                const basic = document.createElement("div");
+                basic.className = "work-basic";
+                const img = document.createElement("img");
+                img.src = work.img;
+                img.alt = work.title;
+                if (work.tags && work.tags.length > 0) {
+                    const tags = document.createElement("div");
+                    tags.className = "work-tags";
+                    work.tags.forEach((tag) => {
+                        const tagItem = document.createElement("span");
+                        tagItem.className = "tag";
+                        tagItem.textContent = tag;
+                        tags.appendChild(tagItem);
+                    });
+                    basic.appendChild(tags);
+                }
+                basic.appendChild(img);
+                const info = document.createElement("div");
+                info.className = "work-info";
+                const h2 = document.createElement("h2");
+                h2.textContent = work.title;
+                const span = document.createElement("span");
+                span.textContent = work.desc;
+                const a = document.createElement("a");
+                a.href = work.link;
+                a.target = "_blank";
+                a.textContent = work.linkText || "前往";
+                info.appendChild(h2);
+                info.appendChild(span);
+                info.appendChild(a);
+                item.appendChild(basic);
+                item.appendChild(info);
+                list.appendChild(item);
+            });
+        });
+</script>

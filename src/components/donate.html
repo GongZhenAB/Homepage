@@ -1,0 +1,110 @@
+<template>
+    <div class="card donate">
+        <div class="card-header">
+            <h2><i class="fa fa-heart"></i>赞助</h2>
+            <div class="card-btns">
+                <button class="close-btn"></button>
+            </div>
+        </div>
+        <div class="card-content donate-box">
+            <div class="donate-links"></div>
+            <h3>赞助名单</h3>
+            <div class="donaters-list"></div>
+        </div>
+    </div>
+</template>
+
+<style>
+    .donate-box {
+        flex-direction: column;
+    }
+
+    .donate-links,
+    .donaters-list {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        justify-content: center;
+        width: 100%;
+        gap: 0.5rem;
+    }
+
+    .donate-links a {
+        padding: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 6rem;
+        gap: 0.5rem;
+        box-sizing: border-box;
+        border-radius: 0.5rem;
+        color: #FFFFFF;
+        background-color: #00000080;
+        transition: background-color 0.25s;
+    }
+
+    .donate-links a:hover {
+        background-color: #FFFFFF20;
+    }
+
+    .donate-links a i {
+        margin: 0;
+        font-size: 2rem;
+    }
+
+    .donate-links a span {
+        margin-top: 0.5rem;
+        height: 1em;
+        line-height: 1em;
+        text-wrap: nowrap;
+        white-space: nowrap;
+        word-break: break-all;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    .donaters-list>div {
+        padding: 0.5rem;
+        box-sizing: border-box;
+        border-radius: 0.5rem;
+        background-color: #00000080;
+        text-align: left;
+    }
+
+    @media screen and (max-width: 767px) {
+
+        .donate-links,
+        .donaters-list {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+</style>
+
+<script>fetch("/src/data/donate.json")
+        .then((res) => res.json())
+        .then((donate) => {
+            const donateWays = document.querySelector(".donate-links");
+            if (donateWays) {
+                donate.ways.forEach((way) => {
+                    const a = document.createElement("a");
+                    a.href = way.link;
+                    a.target = "_blank";
+                    const i = document.createElement("i");
+                    i.className = "iconfont icon-" + way.icon;
+                    const span = document.createElement("span");
+                    span.textContent = way.name;
+                    a.appendChild(i);
+                    a.appendChild(span);
+                    donateWays.appendChild(a);
+                });
+            }
+            const donatersList = document.querySelector(".donaters-list");
+            if (donatersList) {
+                donate.donaters.forEach((donater) => {
+                    const div = document.createElement("div");
+                    div.textContent = donater.name;
+                    donatersList.appendChild(div);
+                });
+            }
+        });
+</script>
