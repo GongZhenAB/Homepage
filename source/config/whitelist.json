@@ -1,0 +1,7 @@
+{
+    "trustedDomains": [
+        "gongz.moe",
+        "gongz.top"
+    ],
+    "deepLinkPattern": "^(?!https?:|ftp:|file:)[a-z][a-z0-9+\\-.]*:"
+}

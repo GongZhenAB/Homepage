@@ -3,14 +3,28 @@ const $ = (selector, parent = document) => parent.querySelector(selector);
 const $all = (selector, parent = document) =>
     Array.from(parent.querySelectorAll(selector));
 
-const createElement = (tagName, className, content) => {
-    const element = document.createElement(tagName);
-    element.className = className;
+const createElement = (selector, content) => {
+    const [tagMatch, ...classAndIdMatches] = selector.split(/([.#][^.#]+)/g);
+    const tag = tagMatch || "div";
+
+    const element = document.createElement(tag);
+
+    classAndIdMatches.forEach((match) => {
+        if (!match) return;
+        const [prefix, value] = [match[0], match.slice(1)];
+        if (prefix === ".") {
+            element.classList.add(value);
+        } else if (prefix === "#") {
+            element.id = value;
+        }
+    });
+
     if (typeof content === "string") {
         element.innerHTML = content;
     } else if (content instanceof Node) {
         element.appendChild(content);
     }
+
     return element;
 };
 
@@ -108,7 +122,7 @@ class Component {
                         newScript.src = src;
                         newScript.onload = resolve;
                         newScript.onerror = reject;
-                        document.head.appendChild(newScript);
+                        document.body.appendChild(newScript);
                     });
                 }
             })
@@ -120,7 +134,6 @@ class Component {
         );
         inlineScripts.forEach((script) => {
             const newScript = document.createElement("script");
-            // 捕获 fetch
             const originalFetch = window.fetch;
             window.fetch = (...args) => {
                 const promise = originalFetch.apply(window, args);
@@ -128,7 +141,7 @@ class Component {
                 return promise;
             };
             newScript.textContent = script.textContent;
-            document.head.appendChild(newScript);
+            document.body.appendChild(newScript);
             window.fetch = originalFetch;
         });
 
@@ -152,9 +165,7 @@ class Card extends Component {
 
     async open() {
         if (await this.load()) {
-            if (!this.el.parentNode) {
-                cardContainer.appendChild(this.el);
-            }
+            if (!this.el.parentNode) cardContainer.appendChild(this.el);
             this.closeBtn = $(".close-btn", this.el);
             this.header = $(".card-header", this.el);
             this.btns = this.header ? $(".card-btns", this.header) : null;
@@ -172,15 +183,12 @@ class Card extends Component {
         this.el.classList.remove("active");
         cardStack = [];
         $all(".back-btn").forEach((b) => b.remove());
-        if (cardContainer && !$all(".card.active").length) {
-            cardContainer.classList.remove("show");
-        }
+        if (!$all(".card.active").length)
+            cardContainer?.classList.remove("show");
     }
 
     init() {
-        if (this.closeBtn) {
-            this.closeBtn.addEventListener("click", () => this.close());
-        }
+        this?.closeBtn.addEventListener("click", () => this.close());
     }
 
     updateBackBtn() {
@@ -212,23 +220,17 @@ class Modal {
 
     show({ title, content, note, type }) {
         return new Promise((resolve) => {
-            // 渲染内容
             this.el.innerHTML = "";
             if (title)
-                this.el.appendChild(createElement("h2", "modal-title", title));
+                this.el.appendChild(createElement("h2.modal-title", title));
             if (content)
-                this.el.appendChild(
-                    createElement("div", "modal-content", content)
-                );
-            if (note)
-                this.el.appendChild(createElement("div", "modal-note", note));
+                this.el.appendChild(createElement(".modal-content", content));
+            if (note) this.el.appendChild(createElement(".modal-note", note));
 
-            // 添加按钮
-            const modalBtns = createElement("div", "modal-actions", "");
+            const modalBtns = createElement(".modal-actions");
             if (type === "confirm") {
                 const cancelBtn = createElement(
-                    "button",
-                    "modal-btn cancel",
+                    "button.modal-btn.cancel",
                     "取消"
                 );
                 cancelBtn.onclick = () => {
@@ -239,8 +241,7 @@ class Modal {
             }
 
             const confirmBtn = createElement(
-                "button",
-                "modal-btn confirm",
+                "button.modal-btn.confirm",
                 "确认"
             );
             confirmBtn.onclick = () => {
@@ -250,7 +251,6 @@ class Modal {
             modalBtns.appendChild(confirmBtn);
             this.el.appendChild(modalBtns);
 
-            // 显示模态框
             this.container.classList.add("show");
         });
     }
@@ -261,12 +261,20 @@ const cardManager = new Map();
 const modal = new Modal();
 
 // ========== 外链拦截 ==========
-const DEEP_LINK_PATTERN = /^(?!https?:|ftp:|file:)[a-z][a-z0-9+\-.]*:/i;
-const TRUSTED_DOMAINS = [location.hostname, "gongz.moe", "gongz.top"];
-const TRUSTED_DOMAIN_REGEXES = TRUSTED_DOMAINS.map((domain) => {
-    const reg = new RegExp(`(^|\\.)${domain.replace(".", "\\.")}$`, "i");
-    return reg;
-});
+let TRUSTED_DOMAINS = [location.hostname];
+let DEEP_LINK_PATTERN;
+let TRUSTED_DOMAIN_REGEXES;
+
+// 加载白名单配置
+fetch("/src/config/whitelist.json")
+    .then((res) => res.json())
+    .then((config) => {
+        TRUSTED_DOMAINS = [location.hostname, ...config.trustedDomains];
+        DEEP_LINK_PATTERN = new RegExp(config.deepLinkPattern, "i");
+        TRUSTED_DOMAIN_REGEXES = TRUSTED_DOMAINS.map((domain) => {
+            return new RegExp(`(^|\\.)${domain.replace(".", "\\.")}$`, "i");
+        });
+    });
 
 function isDeepLink(url) {
     return DEEP_LINK_PATTERN.test(url);
@@ -324,34 +332,46 @@ document.addEventListener("click", (e) => {
     if (!cardLink) return;
 
     const cardName = cardLink.getAttribute("data-card");
-    if (!cardManager.has(cardName)) {
+    if (!cardManager.has(cardName))
         cardManager.set(cardName, new Card(cardName));
-    }
     cardManager.get(cardName).open();
 });
 
 // 点击背景关闭卡片
-if (cardContainer) {
-    cardContainer.addEventListener("click", (e) => {
-        if (e.target === cardContainer) {
+cardContainer?.addEventListener("click", (e) => {
+    if (e.target === cardContainer) {
+        $all(".card").forEach((c) => c.classList.remove("active"));
+        cardStack = [];
+        $all(".back-btn").forEach((b) => b.remove());
+        cardContainer.classList.remove("show");
+    }
+});
+
+// 点击背景关闭模态框
+modal.container?.addEventListener("click", (e) => {
+    if (e.target === modal.container) modal.container.classList.remove("show");
+});
+
+// 按键事件
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+        $(".modal-actions .confirm")?.click();
+    } else if (e.key === "Escape") {
+        if ($(".modal-container.show")) {
+            $(".modal-container").classList.remove("show");
+        } else if ($(".card.active")) {
             $all(".card").forEach((c) => c.classList.remove("active"));
             cardStack = [];
             $all(".back-btn").forEach((b) => b.remove());
             cardContainer.classList.remove("show");
         }
-    });
-}
-
-// 点击背景关闭模态框
-if (modal.container) {
-    modal.container.addEventListener("click", (e) => {
-        if (e.target === modal.container)
-            modal.container.classList.remove("show");
-    });
-}
+    }
+});
 
 // ========== 页脚版权 ==========
-const copyrightYear = new Date().getFullYear();
-const copyright = $("#copyright");
-if (copyright)
-    copyright.textContent = `© ${copyrightYear} Zhen. All rights reserved.`;
+$("footer")?.appendChild(
+    createElement(
+        "p",
+        `© ${new Date().getFullYear()} Zhen. All rights reserved.`
+    )
+);
