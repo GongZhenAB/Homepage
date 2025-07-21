@@ -51,3 +51,6 @@ parent.appendChild(child);
 // 创建元素并添加到 head
 $("head").append(createElement("style", "body { background-color: #f0f0f0; }"));
 ```
+
+| [← 上一篇](selector.md) | [下一篇 →](external-link.md) | [文档首页](index.md) |
+| ----------------------- | ---------------------------- | -------------------- |

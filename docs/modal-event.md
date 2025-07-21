@@ -19,3 +19,6 @@ window.addEventListener("beforeunload", whenClose);
 在上面的代码中，我们监听了 `window` 对象的 `beforeunload` 事件
 
 当用户关闭当前页面时，显示一个确认框，并监听了 `modal` 的返回值。如果用户点击了确认按钮，则调用 `window.close()` 方法关闭当前页面
+
+| [← 上一篇](modal-content.md) | [下一篇 →](selector.md) | [文档首页](index.md) |
+| ---------------------------- | ----------------------- | -------------------- |

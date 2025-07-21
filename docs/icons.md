@@ -26,3 +26,6 @@
 | Buy Me a Coffee | buymeacoffee | `iconfont icon-buymeacoffee` |
 | 爱发电          | afdian       | `iconfont icon-afdian`       |
 | 摩点            | modian       | `iconfont icon-modian`       |
+
+| [← 上一篇](file.md) | [文档首页](index.md) |
+| ------------------- | -------------------- |
