@@ -1,4 +1,4 @@
-# Homepage
+<h1><img src="images/logo.png" alt="logo" width="30" height="30"> Homepage</h1>
 
 一个美观、易上手的个人主页模板
 
@@ -10,8 +10,9 @@
 
 ## ✅ 计划
 
--   [ ] 国际化支持
 -   [ ] 深浅色主题
+
+    ...
 
 ## 🚀 快速上手
 
@@ -51,36 +52,38 @@ git clone git@github.com:GongZhenAB/Homepage.git
 
 ## 🤝 贡献
 
-欢迎通过以下方式参与项目
+#### 报告问题
 
-1. #### 代码贡献
+1. 请先在 [问题列表](https://github.com/GongZhenAB/Homepage/issues) 中搜索，确保问题尚未被报告
+2. 如果是新问题，请提供尽可能详细的信息，包括复现步骤、预期行为和实际行为
 
-    代码贡献流程
+#### 提交代码
+
+1. Fork 本仓库并创建你的分支
+    ```
+    git checkout -b feature/your-feature
+    ```
+2. 进行更改并确保代码通过所有测试
+3. 提交代码并撰写清晰的提交信息
+    ```
+    git commit -m "描述清晰的更改内容"
+    ```
+4. 推送到你的分支
 
     ```
-    # 1. 同步最新代码
-    git pull upstream main
-
-    # 2. 创建开发分支
-    git checkout -b feat/具体功能名  # 如：feat/color-mode-btn
-
-    # 3. 提交变更
-    git commit -m "feat: 添加颜色模式切换按钮"
-
-    # 4. 推送并创建 PR
-    git push origin feat/具体功能名
+    git push origin feature/your-feature
     ```
 
-    ##### 代码规范
+5. 创建一个 Pull Request，并描述你的更改
 
-    - 组件命名：<prefix>-component-name
+#### 改进文档
 
-    - 提交信息格式：类型(范围): 描述
-      示例：fix(header): 修复导航栏错位问题
+1. 如果发现文档有错误或需要补充，请直接编辑相关文件
+2. 提交 Pull Request 并说明改动内容
 
-2. #### 非代码贡献
-    - 提交问题&建议：在 [Issues](https://github.com/GongZhenAB/Homepage/issues) 新建议题
-    - 改进文档：编辑 `docs/` 目录下的文档
+#### 代码规范
+
+请遵循项目的 [代码风格指南](docs/code-style.md)
 
 ## ❤️ 赞助
 
@@ -89,7 +92,7 @@ git clone git@github.com:GongZhenAB/Homepage.git
 你的支持将帮助我：
 
 -   持续维护和更新项目
-
 -   添加更多实用功能
-
 -   提供更好的项目支持
+
+你的名字将会出现在 [我的主页](https://gongz.moe) 的 **赞助** 卡片中
